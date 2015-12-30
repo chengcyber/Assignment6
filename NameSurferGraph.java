@@ -71,14 +71,18 @@ public class NameSurferGraph extends GCanvas
 		if (!entryList.isEmpty()) {
 			for(int i = 0; i < entryList.size(); i++) {
 				for(int j = 0; j < NDECADES; j++) {
-					GLabel lbl = new GLabel(entryList.get(i).getName(),
-							(double)j * getWidth() / NDECADES, 
+					
+					/* draw points */
+					GLabel lbl = new GLabel(entryList.get(i).getName());
+					lbl.setColor(getColorForIndex(i));
+					add(lbl, (double)j * getWidth() / NDECADES, 
 							(getHeight() - GRAPH_MARGIN_SIZE - (double)entryList.get(i).getRank(j) / MAX_RANK * (getHeight() - 2 * GRAPH_MARGIN_SIZE)));
-					
-					
+					/* draw lines */
 					add(lbl);
 					if (j!=0) {
-						add(new GLine(lbl.getX(), lbl.getY(), lastLabel.getX(), lastLabel.getY()));
+						GLine line = new GLine(lbl.getX(), lbl.getY(), lastLabel.getX(), lastLabel.getY());
+						line.setColor(getColorForIndex(i));
+						add(line);
 					}
 					lastLabel = lbl;
 				}
@@ -114,6 +118,10 @@ public class NameSurferGraph extends GCanvas
 //		add(new GLabel("" + getWidth() ), 100, 100);
 	}
 	
+	/* Returns a color to use for each name */
+	public Color getColorForIndex(int k) {
+		return COLORS[ k % COLORS.length ];
+	}
 	
 	
 	/* Implementation of the ComponentListener interface */
@@ -124,4 +132,10 @@ public class NameSurferGraph extends GCanvas
 	
 	private ArrayList<NameSurferEntry> entryList;
 	private GLabel lastLabel;
+	
+	/* CONSTATNS Colors */
+	private static final Color[] COLORS = {
+		Color.RED, Color.YELLOW, Color.BLUE, Color.GREEN, Color.PINK,
+		Color.CYAN, Color.MAGENTA, Color.ORANGE
+	};
 }
